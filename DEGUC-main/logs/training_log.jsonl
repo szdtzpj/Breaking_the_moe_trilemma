@@ -1,0 +1,14 @@
+{"t": 1757694816.7772684, "event": "train", "step": 1, "loss": 1.2024329900741577, "ce": 1.2022151947021484, "balance": 0.01088861282914877, "batch_acc": 0.25, "groups": 4, "offloaded": 0, "reloaded": 0}
+{"t": 1757694823.4405513, "event": "train", "step": 2, "loss": 0.8004693984985352, "ce": 0.8002941608428955, "balance": 0.008762091398239136, "batch_acc": 0.5, "groups": 4, "offloaded": 0, "reloaded": 0}
+{"t": 1757694830.0493407, "event": "train", "step": 3, "loss": 0.6168691515922546, "ce": 0.6167184710502625, "balance": 0.007535459473729134, "batch_acc": 0.625, "groups": 4, "offloaded": 0, "reloaded": 0}
+{"t": 1757694836.6040564, "event": "train", "step": 4, "loss": 0.6609014272689819, "ce": 0.6607789397239685, "balance": 0.0061247143894433975, "batch_acc": 0.5, "groups": 4, "offloaded": 0, "reloaded": 0}
+{"t": 1757694836.6270757, "event": "cluster", "step": 5, "groups": 4, "stability": 1.0, "group_map": {"0": [0, 13, 6, 3, 15], "1": [4, 1, 10, 7, 11], "2": [8, 5], "3": [12, 9, 2, 14]}}
+{"t": 1757694843.266682, "event": "train", "step": 5, "loss": 1.094031810760498, "ce": 1.0939217805862427, "balance": 0.005501199513673782, "batch_acc": 0.25, "groups": 4, "offloaded": 0, "reloaded": 0}
+{"t": 1757694849.9807732, "event": "train", "step": 6, "loss": 0.6009283661842346, "ce": 0.6008116602897644, "balance": 0.0058338940143585205, "batch_acc": 0.5, "groups": 4, "offloaded": 0, "reloaded": 0}
+{"t": 1757694856.5790966, "event": "train", "step": 7, "loss": 0.6925210356712341, "ce": 0.6924304962158203, "balance": 0.0045264046639204025, "batch_acc": 0.625, "groups": 4, "offloaded": 0, "reloaded": 0}
+{"t": 1757694863.1460912, "event": "train", "step": 8, "loss": 0.7846239805221558, "ce": 0.7845274806022644, "balance": 0.004824066534638405, "batch_acc": 0.5, "groups": 4, "offloaded": 0, "reloaded": 0}
+{"t": 1757694869.6755583, "event": "train", "step": 9, "loss": 1.3998839855194092, "ce": 1.3997712135314941, "balance": 0.005636267364025116, "batch_acc": 0.5, "groups": 4, "offloaded": 0, "reloaded": 0}
+{"t": 1757694869.6939154, "event": "cluster", "step": 10, "groups": 4, "stability": 1.0, "group_map": {"0": [0, 13, 6, 3, 15], "1": [4, 1, 10, 7, 11], "2": [8, 5], "3": [12, 9, 2, 14]}}
+{"t": 1757694869.6949277, "event": "offload", "step": 10, "offloaded": 0}
+{"t": 1757694876.2913806, "event": "train", "step": 10, "loss": 1.0729612112045288, "ce": 1.072867751121521, "balance": 0.004670444875955582, "batch_acc": 0.5, "groups": 4, "offloaded": 0, "reloaded": 0}
+{"t": 1757695244.718608, "event": "validation", "step": 10, "val_loss": 0.7513543695484827, "val_acc": 0.5}

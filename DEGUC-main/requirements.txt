@@ -1,0 +1,19 @@
+# DEGUC - Dynamic Expert Grouping with Unified Compression
+# Core dependencies
+torch>=2.0.0
+transformers>=4.30.0
+datasets>=2.12.0
+pyyaml>=6.0
+numpy>=1.24.0
+
+# Optional dependencies for visualization
+matplotlib>=3.7.0
+
+# Optional dependencies for distributed training
+accelerate>=0.20.0
+
+# Development dependencies (optional)
+pytest>=7.3.0
+
+
+
