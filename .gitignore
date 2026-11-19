@@ -3,6 +3,8 @@
 *.iml
 # Python 缓存文件
 __pycache__/
+.pytest_cache/
+*.egg-info/
 *.pyc
 *.pyo
 *.pyd

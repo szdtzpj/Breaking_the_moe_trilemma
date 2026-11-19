@@ -1,0 +1,27 @@
+# DyClust-MoE-Lite 精简模式配置（对应论文 Section 3.4 & Table 7）
+# 保留动态分组、精确 FP64 SVD 重拟合、b_{l,e}/B_l 预算账本、质量蒸馏与容量修复；
+# 省略筛选视图输出漂移预检 D_out、64 步影子门控与 64 切片插值桥。
+model:
+  vocab_size: 32000
+  num_layers: 12
+  d_model: 768
+  num_heads: 12
+  d_ff: 2688
+  max_seq_len: 2048
+  moe_layers: [1, 2, 4, 5, 7, 8, 10, 11]
+
+moe:
+  num_experts: 128
+  group_size: 8
+  rank: 8
+  top_k: 2
+  ffn_type: gelu_2mat
+  mode: lite
+  enable_output_drift_gate: false
+  enable_shadow_preflight: false
+  enable_bridge: false
+  enable_cum_ledger: true
+  threshold_alpha: 1.0
+  num_devices: 8
+  gpus_per_node: 4
+  coalesce_tokens: true

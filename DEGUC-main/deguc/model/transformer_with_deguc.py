@@ -139,9 +139,9 @@ class MiniTransformerWithDEGUC(nn.Module):
                 )
                 balance_losses.append(bl)
         else:
-        for layer in self.layers:
-            x, bl = layer(x, attention_mask)
-            balance_losses.append(bl)
+            for layer in self.layers:
+                x, bl = layer(x, attention_mask)
+                balance_losses.append(bl)
         
         x = self.ln(x)
         if self.use_mean_pool:

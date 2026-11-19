@@ -106,53 +106,53 @@ class HierarchicalRouter(nn.Module):
                         continue
                     
                     g_id = self.group_ids[group_idx]
-                group_score = selected_group_scores[i, j].item()
-                    
+                    group_score = selected_group_scores[i, j].item()
+
                     # Clamp group score
                     group_score = max(0.0, min(1.0, group_score))
-                    
+
                     if g_id not in self.group_expert_map:
                         import warnings
                         warnings.warn(f"Group {g_id} not in expert map, skipping")
                         continue
-                    
-                experts = self.group_expert_map[g_id]
-                if not experts:
-                    continue
-                    
+
+                    experts = self.group_expert_map[g_id]
+                    if not experts:
+                        continue
+
                     if str(g_id) not in self.intra_group_routers:
                         import warnings
                         warnings.warn(f"No router for group {g_id}, skipping")
                         continue
-                    
-                intra_router = self.intra_group_routers[str(g_id)]
-                logits = intra_router(token_hidden)
-                    
+
+                    intra_router = self.intra_group_routers[str(g_id)]
+                    logits = intra_router(token_hidden)
+
                     # Add numerical stability
                     logits = torch.clamp(logits, min=-20, max=20)
-                probs = F.softmax(logits, dim=-1).squeeze(0)
-                    
-                k = min(self.top_k, probs.shape[0])
+                    probs = F.softmax(logits, dim=-1).squeeze(0)
+
+                    k = min(self.top_k, probs.shape[0])
                     if k == 0:
                         continue
-                    
-                exp_scores, exp_idx = torch.topk(probs, k=k)
-                    
-                for s, idx_e in zip(exp_scores.tolist(), exp_idx.tolist()):
+
+                    exp_scores, exp_idx = torch.topk(probs, k=k)
+
+                    for s, idx_e in zip(exp_scores.tolist(), exp_idx.tolist()):
                         # Validate expert index
                         if idx_e < 0 or idx_e >= len(experts):
                             import warnings
                             warnings.warn(f"Invalid expert index {idx_e} for group {g_id}, skipping")
                             continue
-                        
-                    expert_id = experts[idx_e]
+
+                        expert_id = experts[idx_e]
                         combined_score = group_score * s
-                        
+
                         # Clamp combined score
                         combined_score = max(0.0, min(1.0, combined_score))
-                        
+
                         token_routes.append((expert_id, combined_score))
-                        
+
                 except Exception as ex:
                     import warnings
                     warnings.warn(f"Error in routing for token {i}, group {j}: {ex}")

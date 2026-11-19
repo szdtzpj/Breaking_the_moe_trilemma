@@ -131,17 +131,17 @@ class GroupSharedLowRank(nn.Module):
                 continue
             
             try:
-            A = self.expert_residuals[f"{e}_A"]
-            Bp = self.expert_residuals[f"{e}_B"]
-            g = expert_group[e]
-                
+                A = self.expert_residuals[f"{e}_A"]
+                Bp = self.expert_residuals[f"{e}_B"]
+                g = expert_group[e]
+
                 if str(g) not in self.group_bases:
                     import warnings
                     warnings.warn(f"Group {g} not found in bases, skipping expert {e}")
                     continue
-                
-            Wg = self.group_bases[str(g)]
-                
+
+                Wg = self.group_bases[str(g)]
+
                 # Ensure tensors are on the same device
                 if A.device != device:
                     A = A.to(device)
@@ -149,22 +149,22 @@ class GroupSharedLowRank(nn.Module):
                     Bp = Bp.to(device)
                 if Wg.device != device:
                     Wg = Wg.to(device)
-                
+
                 # Compute effective weight with numerical stability
-            delta = torch.matmul(A, Bp.t())
-            W_eff = Wg + delta
-                
+                delta = torch.matmul(A, Bp.t())
+                W_eff = Wg + delta
+
                 # Process tokens
-            X = hidden[token_indices]
-            Y = torch.matmul(X, W_eff)
-                
+                X = hidden[token_indices]
+                Y = torch.matmul(X, W_eff)
+
                 # Accumulate weighted outputs
-            for idx_local, tok in enumerate(token_indices):
-                w = token_weights[(tok, e)]
+                for idx_local, tok in enumerate(token_indices):
+                    w = token_weights[(tok, e)]
                     # Clamp weight for numerical stability
                     w = max(0.0, min(1.0, w))
-                out[tok] += Y[idx_local] * w
-                    
+                    out[tok] += Y[idx_local] * w
+
             except Exception as ex:
                 import warnings
                 warnings.warn(f"Error processing expert {e}: {ex}, skipping")

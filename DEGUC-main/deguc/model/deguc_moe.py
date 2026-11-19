@@ -111,48 +111,48 @@ class DEGUCModel(nn.Module):
     def _forward_impl(self, hidden: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor, Dict[str, Any]]:
         """Internal forward implementation."""
         try:
-        routing, balance_loss = self.router(hidden)
-        experts_needed = set(e for _, lst in routing for e,_ in lst)
-        reloaded = 0
-            
+            routing, balance_loss = self.router(hidden)
+            experts_needed = set(e for _, lst in routing for e, _ in lst)
+            reloaded = 0
+
             # Reload offloaded experts if needed
-        for e in experts_needed:
+            for e in experts_needed:
                 try:
-            changed = self.offloader.reload_if_needed(
+                    changed = self.offloader.reload_if_needed(
                         e, self.compression, self.input_dim, self.rank, self.output_dim, self.param_dtype
-            )
-            if changed:
-                reloaded += 1
-                global_stats.reloaded_experts += 1
+                    )
+                    if changed:
+                        reloaded += 1
+                        global_stats.reloaded_experts += 1
                         # Update quantization cache for reloaded expert
-                if self.quantizer.int8_enabled:
-                    self.quantizer.update_single_expert(e, self.compression)
+                        if self.quantizer.int8_enabled:
+                            self.quantizer.update_single_expert(e, self.compression)
                 except Exception as ex:
                     import warnings
                     warnings.warn(f"Failed to reload expert {e}: {ex}")
-            
+
             # Forward through experts
-        if self.quantizer.int8_enabled:
-            out = self.quantizer.forward_experts_int8(hidden, routing, self.compression)
-        else:
-            out = self.compression.forward_experts(hidden, routing)
-            
+            if self.quantizer.int8_enabled:
+                out = self.quantizer.forward_experts_int8(hidden, routing, self.compression)
+            else:
+                out = self.compression.forward_experts(hidden, routing)
+
             # Update statistics
-        for token_idx, lst in routing:
-            for e,_ in lst:
+            for token_idx, lst in routing:
+                for e, _ in lst:
                     try:
-                global_stats.expert_stats[e].update(hidden[token_idx:token_idx+1])
+                        global_stats.expert_stats[e].update(hidden[token_idx:token_idx+1])
                     except Exception:
                         pass  # Silently skip stat update errors
-            
+
             # Check output for NaN/Inf
             if torch.isnan(out).any() or torch.isinf(out).any():
                 import warnings
                 warnings.warn("Output contains NaN or Inf, replacing with zeros")
                 out = torch.nan_to_num(out, nan=0.0, posinf=0.0, neginf=0.0)
-            
-        return out, balance_loss, {"reloaded": reloaded}
-            
+
+            return out, balance_loss, {"reloaded": reloaded}
+
         except Exception as ex:
             import warnings
             warnings.warn(f"Error in forward pass: {ex}, returning zeros")

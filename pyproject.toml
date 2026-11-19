@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dyclust-moe"
+version = "1.0.0"
+description = "DyClust-MoE: One Grouping State for Expert Sharing, Routing, and Placement (ICLR 2027)"
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "MIT"}
+dependencies = [
+    "torch>=2.0.0",
+    "numpy>=1.24.0",
+    "pyyaml>=6.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=7.3.0"]
+public-transfer = ["transformers>=4.40.0", "datasets>=2.14.0"]
+mip = ["scipy>=1.11.0"]
+
+[tool.setuptools.packages.find]
+include = ["dyclust_moe*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

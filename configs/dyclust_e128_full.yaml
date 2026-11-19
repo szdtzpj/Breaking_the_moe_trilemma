@@ -1,0 +1,44 @@
+# DyClust-MoE E=128 主小模型完整配置（Full Mode，对应论文 Table 3 & Table 4）
+model:
+  vocab_size: 32000
+  num_layers: 12
+  d_model: 768
+  num_heads: 12
+  d_ff: 2688
+  max_seq_len: 2048
+  layernorm_eps: 1.0e-5
+  moe_layers: [1, 2, 4, 5, 7, 8, 10, 11]  # 对应论文 1-based {2,3,5,6,8,9,11,12}
+  tie_embeddings: true
+
+moe:
+  num_experts: 128
+  group_size: 8
+  rank: 8
+  top_k: 2
+  ffn_type: gelu_2mat
+  retain_bias: true
+  mode: full                  # 可切换为 lite (DyClust-MoE-Lite)
+  state_coupling_mode: single # 可切换: decoupled_cyclic / matched_schedule / partial_route_place / penalized_independent
+  routing_mode: grouped       # 可切换: flat / device_preferred
+  norm_topk_prob: true
+  support_restriction: true
+  selector_mass_threshold: 0.98
+  max_extra_groups: 4
+  capacity_factor: 1.25
+  repair_max_rounds: 16
+  execution_mode: shared_base # 可切换: materialized (2x2 正交重放)
+  num_devices: 8
+  gpus_per_node: 4
+  coalesce_tokens: true
+  threshold_alpha: 1.0        # 全局误差裕度缩放: 0.5 / 1.0 / 2.0
+
+training:
+  continuation_tokens: 3000000000
+  global_batch_tokens: 262144
+  peak_lr: 2.0e-4
+  warmup_ratio: 0.01
+  weight_decay: 0.10
+  betas: [0.9, 0.95]
+  grad_clip: 1.0
+  regroup_opportunities: 99
+  local_lr_ramp_steps: 256

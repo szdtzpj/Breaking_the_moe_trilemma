@@ -7,4 +7,4 @@ print("model.moe exists? ->", isinstance(cfg.get("model"), dict) and "moe" in cf
 if "model" in cfg and "moe" not in cfg["model"]:
     print("Keys under model:", list(cfg["model"].keys()))
 
-    python -B scripts_run_classification_Version2.py --config configs_training_config_8g_classification_Version2.yaml
+# 示例命令：python -B scripts_run_classification_Version2.py --config configs_training_config_8g_classification_Version2.yaml
